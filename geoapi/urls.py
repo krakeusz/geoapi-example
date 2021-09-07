@@ -23,7 +23,7 @@ from geoapi.api import views
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('geodata/', views.IpGeolocationDataList.as_view()),
-    path('geodata/<int:pk>/', views.IpGeolocationDataDetail.as_view()),
+    path('geodata/<int:pk>/', views.IpGeolocationDataDetail.as_view(), name='geodata-detail'),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
