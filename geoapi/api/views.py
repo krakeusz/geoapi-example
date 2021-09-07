@@ -7,7 +7,23 @@ from rest_framework.response import Response
 from rest_framework import status
 import requests
 
-class IpGeolocationDataList(APIView): 
+class IpGeolocationDataList(APIView):
+    """
+    Shows a list of all IP Geolocation entries in the system.
+
+    To add a new entry, write JSON to the "Content:" section at the bottom, in the following format:
+
+    `{ "ip": "8.8.8.8" }`
+
+    or
+
+    `{ "ip": "google.com" }`
+
+    The geolocation data will be fetched from [ipstack.com](https://ipstack.com)
+
+    The entries can be deleted by going to the single entry - follow the link in the 'details_url' field.
+    """
+
     def get(self, request, format=None):
         data = IpGeolocationData.objects.all()
         serializer = IpGeolocationDataSerializer(data, many=True, context={'request': request})
