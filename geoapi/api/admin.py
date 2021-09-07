@@ -1,3 +1,4 @@
 from django.contrib import admin
+from geoapi.api.models import IpGeolocationData
 
-# Register your models here.
+admin.site.register(IpGeolocationData)

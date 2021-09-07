@@ -128,11 +128,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
     'PAGE_SIZE': 10
 }
 
 try:
-    from local_settings import *
+    from geoapi.local_settings import *
 except ImportError as e:
     print("Could not find local_settings.py. Create one, with at least a custom SECRET_KEY.")
     raise e
