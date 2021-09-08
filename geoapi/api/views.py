@@ -11,6 +11,36 @@ from rest_framework import status
 import requests
 
 class IpGeolocationDataList(APIView):
+    """
+    get:
+
+    Shows a list of all IP Geolocation entries in the system.
+
+    You need to be authenticated with JWT in order to access the API.
+    You do this by adding a HTTP header "Authentication: Bearer <your-token>" to your request.
+    To get your first token, refer to the token documentation below.
+
+    post:
+
+    Allows adding new geolocation data. You only need to pass the IP or domain name, and the geolocation data
+    will be fetched from an external service, and then stored in a database.
+
+    The only required parameter is the 'ip' string.
+    For example:
+
+    `{ "ip": "8.8.8.8" }`
+
+    or
+
+    `{ "ip": "google.com" }`
+
+    The geolocation data will be fetched from [ipstack.com](https://ipstack.com)
+
+    You need to be authenticated with JWT in order to access the API.
+    You do this by adding a HTTP header "Authentication: Bearer <your-token>" to your request.
+    To get your first token, refer to the token documentation below.
+
+    """
 
     def get(self, request, format=None):
         data = IpGeolocationData.objects.all()
@@ -47,6 +77,22 @@ class IpGeolocationDataList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class IpGeolocationDataDetail(APIView):
+    """
+    get:
+    Access details of a single IP Geolocation entry.
+
+    You need to be authenticated with JWT in order to access the API.
+    You do this by adding a HTTP header "Authentication: Bearer <your-token>" to your request.
+    To get your first token, refer to the token documentation below.
+
+    delete:
+    Delete a single IP Geolocation entry.
+
+    You need to be authenticated with JWT in order to access the API.
+    You do this by adding a HTTP header "Authentication: Bearer <your-token>" to your request.
+    To get your first token, refer to the token documentation below.
+
+    """
     def get_object(self, pk):
         try:
             return IpGeolocationData.objects.get(pk=pk)
@@ -65,23 +111,15 @@ class IpGeolocationDataDetail(APIView):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def api_root(request, format=None):
+def geolocation_api_root(request, format=None):
     """
-    Shows a list of all IP Geolocation entries in the system.
-
-    To add a new entry, write JSON to the "Content:" section at the bottom, in the following format:
-
-    `{ "ip": "8.8.8.8" }`
-
-    or
-
-    `{ "ip": "google.com" }`
-
-    The geolocation data will be fetched from [ipstack.com](https://ipstack.com)
-
-    The entries can be deleted by going to the single entry - follow the link in the 'details_url' field.
-    """
+    This is an API that allows storing and showing Geolocation data based on IP or domain name.
     
+    To access the API, you need a JWT token. You can generate it if you have a user account.
+
+    For more, see the [documentation section](docs/).
+    """
     return Response({
         'geodata': reverse('geodata-list', request=request, format=format),
+        'docs': reverse('swagger-ui', request=request, format=format),
     })
