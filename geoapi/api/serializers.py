@@ -5,7 +5,7 @@ from geoapi.api.models import IpGeolocationData
 class IpGeolocationDataSerializer(serializers.HyperlinkedModelSerializer):
     details_url = serializers.HyperlinkedIdentityField(
         view_name='geodata-detail',
-        lookup_field='pk'
+        lookup_field='ip'
     )
 
     class Meta:

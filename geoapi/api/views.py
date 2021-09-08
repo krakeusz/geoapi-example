@@ -93,19 +93,19 @@ class IpGeolocationDataDetail(APIView):
     To get your first token, refer to the token documentation below.
 
     """
-    def get_object(self, pk):
+    def get_object(self, ip):
         try:
-            return IpGeolocationData.objects.get(pk=pk)
+            return IpGeolocationData.objects.get(ip=ip)
         except IpGeolocationData.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk, format=None):
-        data = self.get_object(pk)
+    def get(self, request, ip, format=None):
+        data = self.get_object(ip)
         serializer = IpGeolocationDataSerializer(data, context={'request': request})
         return Response(serializer.data)
 
-    def delete(self, request, pk, format=None):
-        data = self.get_object(pk)
+    def delete(self, request, ip, format=None):
+        data = self.get_object(ip)
         data.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
