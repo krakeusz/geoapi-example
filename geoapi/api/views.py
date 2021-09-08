@@ -2,27 +2,15 @@ from geoapi.api.models import IpGeolocationData
 from geoapi.api.serializers import IpGeolocationDataSerializer
 from geoapi.settings import IPSTACK_ACCESS_KEY
 from django.http import Http404
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.reverse import reverse
 from rest_framework import status
 import requests
 
 class IpGeolocationDataList(APIView):
-    """
-    Shows a list of all IP Geolocation entries in the system.
-
-    To add a new entry, write JSON to the "Content:" section at the bottom, in the following format:
-
-    `{ "ip": "8.8.8.8" }`
-
-    or
-
-    `{ "ip": "google.com" }`
-
-    The geolocation data will be fetched from [ipstack.com](https://ipstack.com)
-
-    The entries can be deleted by going to the single entry - follow the link in the 'details_url' field.
-    """
 
     def get(self, request, format=None):
         data = IpGeolocationData.objects.all()
@@ -74,3 +62,26 @@ class IpGeolocationDataDetail(APIView):
         data = self.get_object(pk)
         data.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def api_root(request, format=None):
+    """
+    Shows a list of all IP Geolocation entries in the system.
+
+    To add a new entry, write JSON to the "Content:" section at the bottom, in the following format:
+
+    `{ "ip": "8.8.8.8" }`
+
+    or
+
+    `{ "ip": "google.com" }`
+
+    The geolocation data will be fetched from [ipstack.com](https://ipstack.com)
+
+    The entries can be deleted by going to the single entry - follow the link in the 'details_url' field.
+    """
+    
+    return Response({
+        'geodata': reverse('geodata-list', request=request, format=format),
+    })
