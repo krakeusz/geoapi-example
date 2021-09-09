@@ -65,8 +65,12 @@ class IpGeolocationDataList(APIView):
         ipstack_params = {
             'access_key': IPSTACK_ACCESS_KEY,
         }
-        ipstack_response = requests.get(
-            url=f"http://api.ipstack.com/{request.data['ip']}", params=ipstack_params)
+        try:
+            ipstack_response = requests.get(
+                url=f"http://api.ipstack.com/{request.data['ip']}", params=ipstack_params, timeout=5)
+        except requests.exceptions.RequestException as e:
+            return Response(exception=e, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
         json_response = ipstack_response.json()
         if ('success' in json_response and json_response['success'] == False):
             print(json_response)
