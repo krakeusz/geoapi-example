@@ -34,7 +34,8 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('geodata/', views.IpGeolocationDataList.as_view(), name='geodata-list'),
-    path('geodata/<path:ip>', views.IpGeolocationDataDetail.as_view(), name='geodata-detail'),
+    path('geodata/<path:ip>', views.IpGeolocationDataDetail.as_view(),
+         name='geodata-detail'),
     path('openapi/', get_schema_view(
         title="IP Geolocation API",
         description="API for storing geolocation data",
@@ -44,6 +45,6 @@ urlpatterns = [
     ), name='openapi-schema'),
     path('docs/', TemplateView.as_view(
         template_name='api/swagger-ui.html',
-        extra_context={'schema_url':'openapi-schema'}
+        extra_context={'schema_url': 'openapi-schema'}
     ), name='swagger-ui'),
 ]

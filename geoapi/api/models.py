@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class IpGeolocationData(models.Model):
     ip = models.GenericIPAddressField(unique=True)
     continent_name = models.CharField(max_length=50)

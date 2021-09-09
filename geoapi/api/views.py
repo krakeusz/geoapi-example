@@ -10,6 +10,7 @@ from rest_framework.reverse import reverse
 from rest_framework import status
 import requests
 
+
 class IpGeolocationDataList(APIView):
     """
     get:
@@ -44,7 +45,8 @@ class IpGeolocationDataList(APIView):
 
     def get(self, request, format=None):
         data = IpGeolocationData.objects.all()
-        serializer = IpGeolocationDataSerializer(data, many=True, context={'request': request})
+        serializer = IpGeolocationDataSerializer(
+            data, many=True, context={'request': request})
         return Response(serializer.data)
 
     def __get_geolocation_data(self, ipstack_data):
@@ -63,17 +65,20 @@ class IpGeolocationDataList(APIView):
         ipstack_params = {
             'access_key': IPSTACK_ACCESS_KEY,
         }
-        ipstack_response = requests.get(url=f"http://api.ipstack.com/{request.data['ip']}", params=ipstack_params)
+        ipstack_response = requests.get(
+            url=f"http://api.ipstack.com/{request.data['ip']}", params=ipstack_params)
         json_response = ipstack_response.json()
         if ('success' in json_response and json_response['success'] == False):
             print(json_response)
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
-        serializer = IpGeolocationDataSerializer(data=self.__get_geolocation_data(ipstack_response.json()), context={'request': request})
+
+        serializer = IpGeolocationDataSerializer(data=self.__get_geolocation_data(
+            ipstack_response.json()), context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class IpGeolocationDataDetail(APIView):
     """
@@ -92,6 +97,7 @@ class IpGeolocationDataDetail(APIView):
     To get your first token, refer to the token documentation below.
 
     """
+
     def get_object(self, ip):
         try:
             return IpGeolocationData.objects.get(ip=ip)
@@ -100,7 +106,8 @@ class IpGeolocationDataDetail(APIView):
 
     def get(self, request, ip, format=None):
         data = self.get_object(ip)
-        serializer = IpGeolocationDataSerializer(data, context={'request': request})
+        serializer = IpGeolocationDataSerializer(
+            data, context={'request': request})
         return Response(serializer.data)
 
     def delete(self, request, ip, format=None):
@@ -108,12 +115,13 @@ class IpGeolocationDataDetail(APIView):
         data.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def geolocation_api_root(request, format=None):
     """
     This is an API that allows storing and showing Geolocation data based on IP or domain name.
-    
+
     To access the API, you need a JWT token. You can generate it if you have a user account.
 
     For more, see the [documentation section](docs/).
