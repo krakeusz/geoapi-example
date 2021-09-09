@@ -65,7 +65,6 @@ class IpGeolocationDataList(APIView):
         }
         ipstack_response = requests.get(url=f"http://api.ipstack.com/{request.data['ip']}", params=ipstack_params)
         json_response = ipstack_response.json()
-        print(json_response)
         if ('success' in json_response and json_response['success'] == False):
             print(json_response)
             return Response(status=status.HTTP_404_NOT_FOUND)

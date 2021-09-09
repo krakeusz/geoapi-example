@@ -28,7 +28,7 @@ from rest_framework_simplejwt.views import (
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('', views.geolocation_api_root),
+    path('', views.geolocation_api_root, name='root'),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
