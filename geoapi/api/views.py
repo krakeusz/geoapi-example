@@ -65,6 +65,8 @@ class IpGeolocationDataList(APIView):
         ipstack_params = {
             'access_key': IPSTACK_ACCESS_KEY,
         }
+        if IPSTACK_ACCESS_KEY is None:
+            return Response(status=status.HTTP_503_SERVICE_UNAVAILABLE)
         try:
             ipstack_response = requests.get(
                 url=f"http://api.ipstack.com/{request.data['ip']}", params=ipstack_params, timeout=5)
